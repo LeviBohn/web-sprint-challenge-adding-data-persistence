@@ -3,22 +3,28 @@ const express = require('express');
 const router = express.Router();
 const Resource = require('./model');
 
-router.post('/', async (req, res) => {
+router.post('/api/resources', async (req, res) => {
     try {
-        const [resource] = await model.createResource(req.body);
-        res.status(201).json(resource);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error adding resource" });
+        const resourceData = req.body;
+        if (!resourceData.resource_name) {
+            return res.status(400).json({ message: 'Resource name is required' });
+        }
+
+        const newResource = await Resource.createResource(resourceData);
+        res.status(201).json(newResource);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to create resource" });
     }
 });
 
-router.get('/', async (req, res) => {
+router.get('/api/resources', async (req, res) => {
     try {
         const resources = await Resource.getResources();
         res.status(200).json(resources);
-    } catch (error) {
-        res.status(500).json({ error: "Error retrieving resources" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to retrieve resources" });
     }
 });
 

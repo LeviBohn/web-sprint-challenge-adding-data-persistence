@@ -1,31 +1,36 @@
 // build your `/api/projects` router here
-const router = require('express').Router();
+const express = require('express');
 const Project = require('./model');
 
-router.get('/:project_id', async (req, res, next) => {
+const router = express.Router();
+
+router.get('/api/projects', async (req, res) => {
     try {
-        const { project_id } = req.params;
-        const project = await Project.getProjectById(project_id);
-        if (project.length === 0) {
-            return res.status(404).json({ message: 'Project not found' })
-        }
-        res.status(200).json(project);
-    } catch (error) {
-        next(error);
+        const projects = await Project.getAllProjects();
+        return res.status(200).json(projects);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching projects from the database.' });
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/api/projects', async (req, res) => {
     try {
-        const [project] = await Project.createProject(req.body);
-        res.status(201).json(project);
-    } catch (error) {
-        next(error);
+        const projectData = req.body;
+        if (!projectData.project_name) {
+            return res.status(400).json({ message: 'Project name is required' });
+        } else {
+            const newProject = await Project.createProject(projectData);
+            res.status(201).json(newProject);
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to create project' });
     }
 });
 
 router.use((err, req, res, next) => {
-    res.status(500).json({
+    return res.status(500).json({
         customMessage: 'something went wrong inside the project router',
         message: err.message,
         stack: err.stack,

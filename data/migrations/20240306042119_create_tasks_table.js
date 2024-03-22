@@ -18,9 +18,6 @@ exports.up = async function (knex) {
                 .inTable('projects')
                 .onDelete('CASCADE')
                 .onUpdate('CASCADE')
-            table.foreign('project_id')
-                .references('project_id')
-                .inTable('projects')
         });
 };
 
