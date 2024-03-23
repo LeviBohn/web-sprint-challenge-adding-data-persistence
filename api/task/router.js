@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Task = require('./model');
 
-router.post('/api/tasks', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const taskData = req.body;
         if (!taskData.task_description || !taskData.project_id) {
@@ -18,7 +18,7 @@ router.post('/api/tasks', async (req, res) => {
     }
 });
 
-router.get('/api/tasks', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const tasks = await Task.getTasks();
         res.status(200).json(tasks);

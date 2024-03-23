@@ -1,8 +1,8 @@
 const db = require('../dbConfig');
 
 const projects = [
-    { project_name: 'Project A', project_description: 'Description A', project_completed: false },
-    { project_name: 'Project B', project_description: 'Description B', project_completed: true },
+    { project_name: 'Project A', project_description: 'Description A', project_completed: 'false' },
+    { project_name: 'Project B', project_description: 'Description B', project_completed: 'true' },
 ];
 
 const resources = [

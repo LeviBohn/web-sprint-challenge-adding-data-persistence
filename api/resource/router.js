@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Resource = require('./model');
 
-router.post('/api/resources', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const resourceData = req.body;
         if (!resourceData.resource_name) {
@@ -18,7 +18,7 @@ router.post('/api/resources', async (req, res) => {
     }
 });
 
-router.get('/api/resources', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const resources = await Resource.getResources();
         res.status(200).json(resources);

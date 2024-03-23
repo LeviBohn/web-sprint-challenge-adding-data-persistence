@@ -4,7 +4,8 @@ const Project = require('./model');
 
 const router = express.Router();
 
-router.get('/api/projects', async (req, res) => {
+router.get('/', async (req, res) => {
+    console.log('hello from projects')
     try {
         const projects = await Project.getAllProjects();
         return res.status(200).json(projects);
@@ -14,7 +15,7 @@ router.get('/api/projects', async (req, res) => {
     }
 });
 
-router.post('/api/projects', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const projectData = req.body;
         if (!projectData.project_name) {
