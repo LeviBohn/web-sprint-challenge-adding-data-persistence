@@ -3,7 +3,9 @@ const db = require('../../data/dbConfig');
 
 async function getTasks() {
     try {
-        const tasks = await db('tasks');
+        const tasks = await db('tasks')
+            .join('projects', 'tasks.project_id', 'projects.project_id')
+            .select('tasks.*', 'projects.project_name', 'projects.project_description');
         const tasksWithBooleanCompleted = tasks.map(task => ({
             ...task,
             task_completed: task.task_completed === 1 ? true : false
