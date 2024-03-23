@@ -24,7 +24,7 @@ async function getProjectById(project_id) {
 
 async function createProject(projectData) {
     try {
-        const [projectId] = await db('projects').insert(projectData).returning('project_id');
+        const [projectId] = await db('projects').insert(projectData);
         const newProject = await db('projects').where({ project_id: projectId }).first();
         const newProjectWithBooleanCompleted = {
             ...newProject,
@@ -38,5 +38,6 @@ async function createProject(projectData) {
 
 module.exports = {
     getAllProjects,
+    getProjectById,
     createProject,
 };
