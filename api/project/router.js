@@ -18,12 +18,16 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const projectData = req.body;
+        console.log(projectData);
         if (!projectData.project_name) {
             return res.status(400).json({ message: 'Project name is required' });
-        } else {
-            const newProject = await Project.createProject(projectData);
-            res.status(201).json(newProject);
         }
+        const newProject = await Project.createProject(projectData);
+        res.status(201).json({
+            ...newProject,
+            project_completed: !!newProject.project_completed
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to create project' });

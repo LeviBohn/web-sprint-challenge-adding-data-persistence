@@ -23,35 +23,20 @@ async function getProjectById(project_id) {
 }
 
 async function createProject(projectData) {
-    return await db('projects').insert(projectData).returning('*');
+    try {
+        const [projectId] = await db('projects').insert(projectData).returning('project_id');
+        const newProject = await db('projects').where({ project_id: projectId }).first();
+        const newProjectWithBooleanCompleted = {
+            ...newProject,
+            project_completed: newProject.project_completed === 1 ? true : false
+        };
+        return newProjectWithBooleanCompleted;
+    } catch (error) {
+        throw new Error('Failed to create project');
+    }
 }
 
 module.exports = {
     getAllProjects,
     createProject,
 };
-
-// class Project {
-//     async getProjectById(project_id) {
-//         const projectRows = await db('projects as p')
-//             .where('project_id', project_id)
-    
-//         return projectRows
-//     }
-
-//     async createProject(projectData) {
-//         return await db('projects').insert(projectData).returning('*');
-//     }
-// }
-
-// async function getProjectById(project_id) {
-//     const projectRows = await db('projects as p')
-//         .where('project_id', project_id)
-
-//     return projectRows
-// }
-
-// module.exports = { getProjectById }
-
-// module.exports = new Project();
-

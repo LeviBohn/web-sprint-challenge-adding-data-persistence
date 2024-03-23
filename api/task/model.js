@@ -1,16 +1,16 @@
 // build your `Task` model here
 const db = require('../../data/dbConfig');
 
-class Task {
-    async createTask(taskData) {
-        return await db('tasks').insert(taskData).returning('*');
-    }
-
-    async getTasks() {
-        return await db('tasks')
-            .select('tasks.*', 'projects.project_name', 'projects.project_description')
-            .join('projects', 'tasks.project_id', 'projects.project_id');
+async function createTask(taskData) {
+    try {
+        const [taskId] = await db('tasks').insert(taskData).returning('task_id');
+        const newTask = await db('tasks').where({ task_id: taskId }).first();
+        return newTask;
+    } catch (error) {
+        throw new Error('Failed to create task');
     }
 }
 
-module.exports = Task;
+module.exports = {
+    createTask,
+};
